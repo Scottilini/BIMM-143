@@ -1,0 +1,84 @@
+---
+title: "Class 12 RNA SeqGalaxy A16246401"
+author: "Scott MacLeod"
+format: pdf
+---
+
+## Class 12 RNA SeqGalaxy, Proportion of G/G in a Population
+
+Downloaded CSV file from Ensemble
+
+We are going to read the CSV file
+
+```{r}
+mxl <- read.csv("373531-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+head(mxl)
+```
+
+```{r}
+table(mxl$Genotype..forward.strand.)
+```
+
+```{r}
+table(mxl$Genotype..forward.strand.) / nrow(mxl) * 100
+```
+
+
+Now we are going to look at a GBR population with 91 individuals.
+
+```{r}
+gbr <- read.csv("373522-SampleGenotypes-Homo_sapiens_Variation_Sample_rs8067378.csv")
+head(gbr)
+```
+```{r}
+table(gbr$Genotype..forward.strand.) / nrow(gbr) * 100
+```
+
+This variant that is associated with childhood asthma is more frequent in the GBR population that the MXL population.
+
+Now let's dig into this further. 
+
+
+
+# Section 4 (Homework)
+
+One sample is obviously not enough to know what is happening in a population. You are
+interested in assessing genetic differences on a population scale. So, you processed about
+~230 samples and did the normalization on a genome level. Now, you want to find whether
+there is any association of the 4 asthma-associated SNPs (rs8067378...) on ORMDL3
+expression.
+
+How many samples do we have?
+
+```{r}
+expr <- read.table("rs8067378_ENSG00000172057.6.txt")
+head(expr)
+```
+
+```{r}
+nrow(expr)
+```
+```{r}
+table(expr$geno)
+```
+
+```{r}
+library(ggplot2)
+```
+
+Let's make a boxplot
+
+```{r}
+ggplot(expr) + aes(geno, exp, fill=geno) + geom_boxplot(notch=TRUE)
+```
+>Q13: Read this file into R and determine the sample size for each genotype and their
+corresponding median expression levels for each of these genotypes.
+
+The boxplot shows the median expression for each of the genotypes. For the allele A/A the median expression is around 31, while A/G is 25, and G/G is 20. 
+
+>Q14: Generate a boxplot with a box per genotype, what could you infer from the relative
+expression value between A/A and G/G displayed in this plot? Does the SNP effect the
+expression of ORMDL3?
+
+There is a statistically significant difference in expression between the two homozygous genotypes of A/A and G/G. This means that the SNP does effet the expression of ORMDL3.
+
